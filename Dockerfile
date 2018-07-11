@@ -1,25 +1,18 @@
-FROM spritsail/alpine:3.8 AS mono
-
-WORKDIR /output
- 
-RUN apk --repository "http://dl-cdn.alpinelinux.org/alpine/edge/testing" \
-        --no-cache add mono ca-certificates \
- && cert-sync --quiet /etc/ssl/certs/ca-certificates.crt
-
-RUN mkdir -p usr/bin usr/lib/mono/4.5 usr/share/.mono etc \
- && cp -r /etc/mono etc/ \
- && cp -r /usr/share/.mono/* usr/share/.mono \
- && cp -r /usr/bin/mono-sgen usr/bin/mono \
- && cp -r /usr/lib/libmono-btls-shared.so /usr/lib/libMonoPosixHelper.so usr/lib \
- && cp -r /usr/lib/mono/4.5/*.dll usr/lib/mono/4.5 \
- && cp -r /usr/lib/mono/4.5/Facades usr/lib/mono/4.5 \
- && cp -r /usr/lib/mono/gac usr/lib/mono \
- && rm -r usr/lib/mono/4.5/Microsoft.CodeAnalysis* \
-	  usr/lib/mono/gac/RabbitMQ.Client \
- && find usr/lib/mono/gac -iname '*.pdb' -delete
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###
-
 FROM spritsail/alpine:3.8
 
-COPY --from=mono /output/ /
+ARG MONO_VER=5.12.0.226-r0
+ARG MONO_DESC
+ARG MONO_PACKAGE
+
+LABEL maintainer="Spritsail <mono@spritsail.io>" \
+      org.label-schema.vendor="Spritsail" \
+      org.label-schema.name="Mono" \
+      org.label-schema.url="https://github.com/spritsail/mono-apk" \
+      org.label-schema.description=${MONO_DESC} \
+      org.label-schema.version=${MONO_VER} \
+      io.spritsail.version.mono=${MONO_VER} \
+      io.spritsail.mono.packages="mono-runtime {MONO_PACKAGE}"
+
+RUN echo "https://spritsail.io/alpine/mono" >> /etc/apk/repositories \
+ && wget -P /etc/apk/keys https://spritsail.io/alpine/spritsail-alpine.rsa.pub \
+ && apk add --no-cache mono-runtime=${MONO_VER} $(echo -n $MONO_PACKAGE | sed -E "s#(\ |$)#=${MONO_VER} #g")
