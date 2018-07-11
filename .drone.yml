@@ -25,7 +25,7 @@ pipeline:
 matrix:
   include:
     - TAG: runtime
-      DESC: "Mono runtime witout any reference assemblies"
+      DESC: "Mono runtime without any reference assemblies"
       PACKAGE:
     - TAG: 3.5
       DESC: "Mono runtime, including the 2.0 and 3.5 reference assemblies"
