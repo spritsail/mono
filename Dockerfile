@@ -13,6 +13,6 @@ LABEL maintainer="Spritsail <mono@spritsail.io>" \
       io.spritsail.version.mono=${MONO_VER} \
       io.spritsail.mono.packages="mono-runtime {MONO_PACKAGE}"
 
-RUN echo "https://spritsail.io/alpine/mono" >> /etc/apk/repositories \
- && wget -P /etc/apk/keys https://spritsail.io/alpine/spritsail-alpine.rsa.pub \
+RUN echo "https://alpine.spritsail.io/mono" >> /etc/apk/repositories \
+ && wget -P /etc/apk/keys https://alpine.spritsail.io/spritsail-alpine.rsa.pub \
  && apk add --no-cache mono-runtime=${MONO_VER} $(echo -n $MONO_PACKAGE | sed -E "s#(\ |$)#=${MONO_VER} #g")
