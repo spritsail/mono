@@ -7,6 +7,13 @@ pipeline:
       - MONO_PACKAGE=${PACKAGE}
       - MONO_DESC=${DESC}
 
+  test:
+    image: mono-dev
+    commands:
+      - mono --version
+      - apk add ca-certificates-mono
+      - update-ca-certificates
+
   publish:
     image: spritsail/docker-publish
     when: { branch: [ master ], event: [ push, tag, deployment ] }
