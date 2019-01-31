@@ -1,4 +1,4 @@
-FROM spritsail/alpine:3.8
+FROM spritsail/alpine:3.9
 
 ARG MONO_VER=5.16.0.179-r0
 ARG MONO_DESC
