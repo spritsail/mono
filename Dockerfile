@@ -1,6 +1,6 @@
 FROM spritsail/alpine:3.9
 
-ARG MONO_VER=5.16.0.179-r0
+ARG MONO_VER=5.20.1.19-r0
 ARG MONO_DESC
 ARG MONO_PACKAGE
 
@@ -14,4 +14,5 @@ LABEL maintainer="Spritsail <mono@spritsail.io>" \
       io.spritsail.mono.packages="mono-runtime {MONO_PACKAGE}"
 
 RUN echo "https://alpine.spritsail.io/mono" >> /etc/apk/repositories \
+ && apk upgrade --repository http://dl-cdn.alpinelinux.org/alpine/edge/main musl \
  && apk add --no-cache mono-runtime=${MONO_VER} $(echo -n $MONO_PACKAGE | sed -E "s#(\ |$)#=${MONO_VER} #g")
