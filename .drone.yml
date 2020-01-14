@@ -1,7 +1,6 @@
 pipeline:
   build:
     image: spritsail/docker-build
-    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     repo: mono-dev
     build_args:
       - MONO_PACKAGE=${PACKAGE}
@@ -17,17 +16,10 @@ pipeline:
   publish:
     image: spritsail/docker-publish
     when: { branch: [ master ], event: [ push, tag, deployment ] }
-    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     secrets: [ docker_username, docker_password ]
     from: mono-dev
     repo: spritsail/mono
     tags: ${TAG}
-
-  notify:
-    image: spritsail/notify
-    when: { status: [ success, failure ] }
-    secrets: [ webhook_url, notify_token ]
-    tag: ${TAG%%,*}
 
 matrix:
   include:
