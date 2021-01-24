@@ -35,7 +35,6 @@ def monobuild(desc, tags, pkgs=''):
         "image": "spritsail/docker-build",
         "pull": "always",
         "settings": {
-          "repo": "mono-%s-dev" % name,
           "build_args": [
             "MONO_PACKAGE=%s" % pkgs,
             "MONO_DESC=%s" % desc,
@@ -44,7 +43,7 @@ def monobuild(desc, tags, pkgs=''):
       },
       {
         "name": "test",
-        "image": "mono-%s-dev" % name,
+        "image": "${DRONE_REPO_OWNER}/${DRONE_REPO_NAME}:${DRONE_STAGE_TOKEN}",
         "pull": "never",
         "commands": [
           "mono --version",
@@ -57,11 +56,9 @@ def monobuild(desc, tags, pkgs=''):
         "image": "spritsail/docker-publish",
         "pull": "always",
         "settings": {
-          "from": "mono-%s-dev" % name,
           "repo": "spritsail/mono",
           "tags": tags,
-          "username": { "from_secret": "docker_username" },
-          "password": { "from_secret": "docker_password" },
+          "login": { "from_secret": "docker_login" },
         },
       },
     ],
