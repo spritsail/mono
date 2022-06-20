@@ -1,6 +1,6 @@
-FROM spritsail/alpine:3.13
+FROM spritsail/alpine:3.16
 
-ARG MONO_VER=6.12.0.107-r0
+ARG MONO_VER=6.12.0.182-r0
 ARG MONO_DESC
 ARG MONO_PACKAGE
 
